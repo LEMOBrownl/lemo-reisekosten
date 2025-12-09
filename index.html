@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>LEMO Reisekosten / Vorschuss</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- jsPDF lokal (Datei jspdf.umd.min.js muss im gleichen Ordner liegen) -->
+  <script src="jspdf.umd.min.js"></script>
+
+  <!-- BMF-Tabelle (deine bestehende Datei) -->
+  <script src="bmf2025.js"></script>
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#009FE3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+</head>
+<body>
+  <div class="page">
+    <!-- Kopfbereich -->
+    <header class="header">
+      <div>
+        <div class="lemo-name">LEMO Maschinenbau</div>
+        <div class="lemo-title">Reisekosten / Vorschussformular</div>
+      </div>
+      <img src="lemo-logo.png" alt="LEMO Logo" class="logo" />
+    </header>
+
+    <!-- Mitarbeiter & Auftragsdaten -->
+    <section class="card">
+      <h2>Mitarbeiter- &amp; Auftragsdaten</h2>
+      <div class="grid grid-2">
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" type="text" />
+        </div>
+        <div class="field">
+          <label for="personalnr">Personalnummer</label>
+          <input id="personalnr" type="text" />
+        </div>
+        <div class="field">
+          <label for="projekt">Projekt / Auftrags-Nr.</label>
+          <input id="projekt" type="text" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Reisezeit -->
+    <section class="card">
+      <h2>Reisezeit</h2>
+      <div class="grid grid-2">
+        <div class="field">
+          <label for="anreisetag">Anreisetag</label>
+          <input id="anreisetag" type="date" />
+        </div>
+        <div class="field">
+          <label for="rueckreisetag">Rückreisetag</label>
+          <input id="rueckreisetag" type="date" />
+        </div>
+      </div>
+      <p class="hint">
+        Für den Vorschuss wird davon ausgegangen, dass An- und Abreisetag
+        jeweils &gt; 8 Stunden sind. Uhrzeiten sind daher nicht erforderlich.
+      </p>
+    </section>
+
+    <!-- Pauschalen -->
+    <section class="card">
+      <h2>Pauschalen (Land / Ort laut BMF-Tabelle)</h2>
+
+      <div class="field">
+        <label for="countrySelect">Land / Ort</label>
+        <select id="countrySelect">
+          <option value="">Bitte Land / Ort auswählen ...</option>
+        </select>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="field">
+          <label for="rateFull">Verpflegung 24 h (€)</label>
+          <input id="rateFull" type="text" readonly />
+        </div>
+        <div class="field">
+          <label for="ratePartial">An-/Abreisetag &gt; 8 h (€)</label>
+          <input id="ratePartial" type="text" readonly />
+        </div>
+        <div class="field">
+          <label for="rateOvernight">Übernachtungspauschale (€)</label>
+          <input id="rateOvernight" type="text" readonly />
+        </div>
+      </div>
+
+      <div class="grid grid-4">
+        <div class="field">
+          <label for="daysFull">Tage 24 h-Abwesenheit</label>
+          <input id="daysFull" type="number" min="0" />
+        </div>
+        <div class="field">
+          <label for="daysTravel">An-/Abreisetage (&gt; 8 h)</label>
+          <input id="daysTravel" type="number" min="0" />
+        </div>
+        <div class="field">
+          <label for="overnights">Übernachtungen</label>
+          <input id="overnights" type="number" min="0" />
+        </div>
+        <div class="field">
+          <label for="totalDays">Gesamtdauer (Tage)</label>
+          <input id="totalDays" type="number" min="0" readonly />
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="field">
+          <label for="sumMeals">Summe Verpflegung (€)</label>
+          <input id="sumMeals" type="text" readonly />
+        </div>
+        <div class="field">
+          <label for="sumOvernights">Summe Übernachtung (€)</label>
+          <input id="sumOvernights" type="text" readonly />
+        </div>
+      </div>
+    </section>
+
+    <!-- Sonstige Kosten -->
+    <section class="card">
+      <h2>Sonstige Kosten</h2>
+
+      <div id="extraCostsContainer"></div>
+
+      <button id="btnAddCost" type="button" class="btn-secondary">
+        Weitere Position hinzufügen
+      </button>
+
+      <div class="field mt-small">
+        <label for="sumOtherCosts">Gesamt sonstige Kosten (€)</label>
+        <input id="sumOtherCosts" type="text" readonly />
+      </div>
+
+      <div class="field">
+        <label for="sumTotal">Gesamtbetrag Vorschuss (€)</label>
+        <input id="sumTotal" type="text" readonly />
+      </div>
+    </section>
+
+    <!-- Ort, Datum, Unterschriften -->
+    <section class="card">
+      <h2>Ort, Datum &amp; Unterschriften</h2>
+
+      <div class="grid grid-2">
+        <div class="field">
+          <label for="ort">Ort</label>
+          <input id="ort" type="text" />
+        </div>
+        <div class="field">
+          <label for="datum">Datum</label>
+          <input id="datum" type="date" />
+        </div>
+      </div>
+
+      <div class="grid grid-2 sig-grid">
+        <div>
+          <label>Mitarbeiter/in (Unterschrift)</label>
+          <canvas id="sigEmp" class="sig-canvas"></canvas>
+          <button type="button" class="btn-link" data-clear="sigEmp">
+            löschen
+          </button>
+        </div>
+        <div>
+          <label>Vorgesetzte/r (Unterschrift)</label>
+          <canvas id="sigMan" class="sig-canvas"></canvas>
+          <button type="button" class="btn-link" data-clear="sigMan">
+            löschen
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Aktionen -->
+    
+
+<section class="actions">
+      <button id="btnPdf" type="button" class="btn-primary">
+        PDF erzeugen
+      </button>
+      <button id="btnEmail" type="button" class="btn-primary">
+        E-Mail erstellen
+      </button>
+      <button id="btnReset" type="button" class="btn-secondary">
+        Formular zurücksetzen
+      </button>
+    </section>
+
+
+  </div>
+
+	<script src="bmf2025.js"></script>
+	<script src="script.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('service-worker.js').catch(function (err) {
+        console.log('Service Worker registration failed:', err);
+      });
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+:root {
+  --lemo-blue: #009fe3;
+  --border-color: #e0e0e0;
+  --text-main: #222;
+  --bg-page: #f5f7fa;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: var(--text-main);
+  background: var(--bg-page);
+}
+
+.page {
+  max-width: 900px;
+  margin: 12px auto 24px;
+  padding: 16px;
+  background: white;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+}
+
+/* Header */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid var(--lemo-blue);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.logo {
+  height: 40px;
+  object-fit: contain;
+}
+
+.lemo-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--lemo-blue);
+}
+
+.lemo-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Cards */
+
+.card {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.card h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  border-bottom: 1px solid var(--lemo-blue);
+  padding-bottom: 3px;
+}
+
+/* Grid */
+
+.grid {
+  display: grid;
+  gap: 8px 12px;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 700px) {
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Fields */
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+input,
+select,
+textarea {
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  padding: 6px 8px;
+  font-size: 13px;
+}
+
+input[readonly] {
+  background-color: #f4f4f4;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 42px;
+}
+
+.hint {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #555;
+}
+
+/* Buttons */
+
+.btn-primary,
+.btn-secondary,
+.btn-link {
+  border-radius: 20px;
+  padding: 7px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: var(--lemo-blue);
+  color: white;
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--lemo-blue);
+  border: 1px solid var(--lemo-blue);
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--lemo-blue);
+  padding-left: 0;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-link:hover {
+  opacity: 0.9;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* Sonstige Kosten */
+
+.extra-cost-row {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1.2fr) auto;
+  gap: 6px;
+  margin-bottom: 4px;
+  align-items: center;
+}
+
+.extra-cost-row input {
+  width: 100%;
+}
+
+.extra-remove {
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+}
+
+.extra-remove:hover {
+  background: #ddd;
+}
+
+.mt-small {
+  margin-top: 8px;
+}
+
+/* Signaturen */
+
+.sig-grid {
+  margin-top: 8px;
+  gap: 16px;
+}
+
+.sig-canvas {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  width: 100%;
+  max-width: 350px;
+  height: 70px;
+  background: #fafafa;
+  touch-action: none; /* für mobile Schreiben */
+}
