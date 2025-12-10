@@ -446,7 +446,18 @@ function createPdf(sigEmpDataUrl, sigManDataUrl) {
     console.warn("Signaturbilder konnten nicht eingefügt werden:", e);
   }
 
-  const fileName = name ? `Reisekosten_${name}.pdf` : "Reisekosten.pdf";
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  const dd = String(now.getDate()).padStart(2, "0");
+  const HH = String(now.getHours()).padStart(2, "0");
+  const MM = String(now.getMinutes()).padStart(2, "0");
+  const timestamp = `${yyyy}-${mm}-${dd}_${HH}-${MM}`;
+  const fnameName = name || "Person";
+  const fnameProj = proj || "Projekt";
+  const fileName = `Reisekosten_${fnameName}_${fnameProj}_${timestamp}.pdf`;
+  doc.setFontSize(10);
+  doc.text(`Erstellt am: ${yyyy}-${mm}-${dd} ${HH}:${MM} Uhr`, 15, 285);
   doc.save(fileName);
 }
 
@@ -501,9 +512,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function buildMailSubject() {
   const name = document.getElementById("name")?.value || "";
   const project = document.getElementById("auftrag")?.value || "";
-  const base = "Reisekostenvorschuss";
-  if (!name && !project) return base;
-  return [base, name, project].filter(Boolean).join(" ");
+  return `${name}_${project}_Reisekostenvorschuss`;
 }
 
 // Kurzform, Variante A
