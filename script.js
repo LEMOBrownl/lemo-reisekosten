@@ -521,7 +521,7 @@ function buildMailSubject() {
 
 // Kurzform, Variante A
 function buildMailBody() {
-  const get = (id) => document.getElementById(id)?.value || "";
+  const projekt = document.getElementById("projekt")?.value || "";
 
   const name = get("name");
   const personalnr = get("personalnr");
