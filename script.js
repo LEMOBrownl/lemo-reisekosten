@@ -510,9 +510,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function buildMailSubject() {
-  const name = document.getElementById("name")?.value || "";
-  const project = document.getElementById("auftrag")?.value || "";
-  return `${name}_${project}_Reisekostenvorschuss`;
+  const name = document.getElementById("name")?.value.trim() || "";
+  const projekt = document.getElementById("projekt")?.value.trim() || "";
+  const base = "Reisekostenvorschuss";
+
+  // Subject format: Name_Projekt/Auftrag Nr._Reisekostenvorschuss
+  const parts = [name, projekt, base].filter(Boolean);
+  return parts.length ? parts.join("_") : base;
 }
 
 // Kurzform, Variante A
